@@ -65,8 +65,6 @@ def sauvegarde():
 
 
 def etape_automate():
-    config_aléatoire()
-    print(config)
     for i in range(len(config)) :
         config[i].insert(0, 0)
         config[i].insert(4, 0)
@@ -83,8 +81,16 @@ def etape_automate():
     for i in range(3) :
         del config[i][0], config[i][3]
 
+
+config_vide()
+config_aléatoire()
+config_aléatoire()
 etape_automate()
 print(config)
+
+
+
+
 
     
 #CREATION DE LA FENETRE#
@@ -104,6 +110,4 @@ boutonaléatoire.grid(row=2, column=0)
 boutoncommencer.grid(row=2, column=1)
 boutonvide.grid(row=2, column=2)
 racine.mainloop()
-
-
 
