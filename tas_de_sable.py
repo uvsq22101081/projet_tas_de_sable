@@ -12,6 +12,8 @@
 import random as rd
 import tkinter as tk
 
+from numpy import diff
+
 # variables globales
 
 config = []
@@ -19,20 +21,23 @@ config = []
 # fonctions
 
 def config_vide() :
+    '''Initialise la configuration courante avec une configuration vide de grains de sable'''
     global config
     config = [[0] * 3 for i in range(3)]
     
 
 
 def config_aléatoire():
+    '''Ajoute pour chaque case un nombre aléatoire de grains de sable compris entre 0 et 3'''
     config_vide()
     for i in range(3) :
         for j in range(3) :
-            nbr_grains = rd.randint(0,9)
+            nbr_grains = rd.randint(0,3)
             config[i][j] += nbr_grains
 
 
 def affichage_grille():
+    '''Met à jour l'affichage de la grille dans l'interface graphique à partir de la configuration courante'''
     
     x = 0
     y =0
@@ -59,12 +64,14 @@ def générer_vide():
 
 
 def sauvegarde():
+    '''Ecrit la configuration courante dans un fichier sauvegarde'''
     fic_sauvegarde = open("configuration sauvegardée", "w")
     fic_sauvegarde.write(str(config))
     fic_sauvegarde.close()
 
 
 def etape_automate():
+    '''Réalise une étape de l'automate et met à jour l'affichage de la grille à chaque avalanche'''
     for i in range(len(config)) :
         config[i].insert(0, 0)
         config[i].insert(4, 0)
@@ -82,26 +89,32 @@ def etape_automate():
     for i in range(3) :
         del config[i][0], config[i][3]
 
-<<<<<<< HEAD
-config = [[2, 2, 3], [1, 6, 1], [3, 2, 1]]
-etape_automate()
-print(config)
-=======
 
-config_vide()
-config_aléatoire()
-config_aléatoire()
-etape_automate()
-print(config)
+def addition():
+    '''Fait l'addition case par case de la configuration courante et d'une configuration choisie par l'utilisateur'''
+    config2 = config
+    for i in range(len(config)) :
+        for j in range(len(config[0])) :
+            config[i][j] = config[i][j] + config2[i][j]
+    print(config)
 
 
-
-
+def soustraction():
+    '''Fait la soustraction case par case de la configuration courante et d'une configuration choisie par l'utilisateur.
+    Si la différence est négative, le résultat vaut 0.'''
+    config2 = config
+    for i in range(len(config)) :
+        for j in range(len(config[0])) :
+            diff = config[i][j] - config2[i][j]
+            if diff > 0 :
+                config[i][j] = diff
+            else :
+                config[i][j] = 0
 
     
 #CREATION DE LA FENETRE#
 
-HAUTEUR_CANEVAS,LARGEUR_CANEVAS = 420,420
+HAUTEUR_CANEVAS, LARGEUR_CANEVAS = 420,420
 HAUTEUR_GRILLE, LARGEUR_GRILLE= 70,70
 
 
@@ -116,5 +129,3 @@ boutonaléatoire.grid(row=2, column=0)
 boutoncommencer.grid(row=2, column=1)
 boutonvide.grid(row=2, column=2)
 racine.mainloop()
-
->>>>>>> ee3aba9988d0f9793c5c9a392e7cb85a74980d68
