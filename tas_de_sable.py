@@ -96,7 +96,11 @@ def etape_automate():
                 config[i+1][j] += 1
                 config[i][j-1] += 1
                 config[i][j+1] += 1
-                config[i] -= 4
+                config[i][j] -= 4
     del config[0], config[3]
     for i in range(3) :
         del config[i][0], config[i][3]
+
+config = [[2, 2, 3], [1, 6, 1], [3, 2, 1]]
+etape_automate()
+print(config)
