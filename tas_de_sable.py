@@ -70,7 +70,7 @@ def sauvegarde():
     fic_sauvegarde.close()
 
 
-def etape_automate():
+def etape_automate(config):
     '''Réalise une étape de l'automate et met à jour l'affichage de la grille à chaque avalanche'''
     for i in range(len(config)) :
         config[i].insert(0, 0)
@@ -90,6 +90,22 @@ def etape_automate():
         del config[i][0], config[i][3]
 
 
+def stabilisation(config):
+    '''Stabilise la configuration courante :
+    Crée une liste à deux dimensions remplie de 1. Après chaque étape de l'automate, pour chaque case (i, j),
+    si elle est stable, l'élément (i, j) de la liste vaut 0. Réitère l'automate jusqu'à ce ce que la liste soit remplie de 0.'''
+    L = [[1] * 3 for i in range(3)]
+    while L != [[0] * 3 for i in range(3)] :
+        etape_automate(config)
+        for i in range(len(config)) :
+            for j in range(len(config)) :
+                if config[i][j] >= 4 :
+                    L[i][j] = 1
+                else :
+                    L[i][j] = 0
+    return config
+
+    
 def addition():
     '''Fait l'addition case par case de la configuration courante et d'une configuration choisie par l'utilisateur'''
     config2 = config
@@ -105,11 +121,32 @@ def soustraction():
     config2 = config
     for i in range(len(config)) :
         for j in range(len(config[0])) :
-            diff = config[i][j] - config2[i][j]
-            if diff > 0 :
-                config[i][j] = diff
+            res = config[i][j] - config2[i][j]
+            if res > 0 :
+                config[i][j] = res
             else :
                 config[i][j] = 0
+
+
+def config_pile_centrée():
+    '''Attribue un nombre N de grains de sable à la case du milieu (N étant choisi par l'utilisateur) et 0 aux autres.'''
+    N = int("Entrer un nombre de grains de sable")
+    config = [[0] * 3]
+    config[1][1] = N
+
+
+def max_stable():
+    config = [[3] * 3 for i in range(3)]
+
+
+def identity():
+    config = [[6] * 3 for i in range(3)]
+    for i in range(len(config)):
+        for j in range(len(config)):
+            config[i][j] -= stabilisation(config)[i][j]
+            stabilisation(config)
+
+
 
     
 #CREATION DE LA FENETRE#
@@ -129,3 +166,6 @@ boutonaléatoire.grid(row=2, column=0)
 boutoncommencer.grid(row=2, column=1)
 boutonvide.grid(row=2, column=2)
 racine.mainloop()
+
+identity()
+print(config)
